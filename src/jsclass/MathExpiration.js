@@ -7,7 +7,7 @@ class MathExpration {
         if (operation === '~')
         {
             let l = stack[stack.length - 1]; stack.pop();
-            
+
             switch (operation) {
                 case '~': stack.push(parseFloat(-l)); break;
             }

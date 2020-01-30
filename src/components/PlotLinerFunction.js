@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import  "../style/PlotLinerFunction.css";
-import MathExpration from "../jsclass/MathExpration";
+import MathExpration from "../jsclass/MathExpiration";
 
 
 

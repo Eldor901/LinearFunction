@@ -1,5 +1,5 @@
 
-class ValidateExprationMaht {
+class ValidateExprationMath {
     isMathOperation = (mathOperation) =>
     {
         const  mathOperStates = {
@@ -138,4 +138,4 @@ class ValidateExprationMaht {
 }
 
 
-export default ValidateExprationMaht;
+export default ValidateExprationMath;

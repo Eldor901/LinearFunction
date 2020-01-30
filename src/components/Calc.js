@@ -1,6 +1,6 @@
 import React from 'react';
 import PlotLinerFunction from "./PlotLinerFunction";
-import ValidateExprationMaht from '../jsclass/ValidateExprationMaht';
+import ValidateExprationMath from '../jsclass/ValidateExprationMath';
 
 import  "../style/Calc.css";
 import WolframLinerFunction from "./WolframLinerFunction";
@@ -33,7 +33,7 @@ export default class Calc extends React.Component {
         if (mathOperation !== '')
             mathOperation = mathOperation.replace(/\s*/g,'');
 
-        let validate = new ValidateExprationMaht();
+        let validate = new ValidateExprationMath();
 
 
         let isMathoperation =  validate.isMathOperation(mathOperation);
