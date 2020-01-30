@@ -1,0 +1,39 @@
+.formLeft
+{
+    float: left;
+}
+
+.mathOperTop
+{
+    margin-top: 0px;
+    margin-right: 20px;
+}
+
+.formNum
+{
+    width: 60px;
+    padding-left: 10px;
+}
+
+.formOper
+{
+    padding-left: 10px;
+}
+
+
+.linerFunctionForm
+{
+    display: inline-block;
+}
+
+.centerForm
+{
+    text-align: center;
+}
+
+.formRadio
+{
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: 30px;
+}
