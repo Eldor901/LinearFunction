@@ -50,6 +50,23 @@ test('Error Validation', ()=>{
     assert.ok(!ValidateEXMath.isMathOperation("-x+3x"));
 });
 
+test('Check unary operation', ()=>{
+    assert.ok(ValidateEXMath.isMathOperation("-x+3"));
+});
+
+test('Check unary operation with parentheses', ()=>{
+    assert.ok(ValidateEXMath.isMathOperation("-x+3*(-2+3)"));
+});
+
+test('Error not unary operation * or /', ()=>{
+    assert.ok(!ValidateEXMath.isMathOperation("/x+3"));
+});
+
+test('Error not unary operation * or / with parentheses', ()=>{
+    assert.ok(!ValidateEXMath.isMathOperation("/x+3*(/2+3)"));
+});
+
+
 
 
 

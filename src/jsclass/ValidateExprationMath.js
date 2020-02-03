@@ -9,10 +9,13 @@ class ValidateExprationMath {
             mathOperState: 'mathOperState',Integer: 'Integer', Operations: 'operations', Variable: 'variable',
             LeftParenthesis:'LeftParenthesis', RightParenthesis: 'RightParenthesis', Error: 'Error'};
         let operations = "+-/*";
+        let unaryOperators = "+-";
         let numbers = "1234567890";
         let state = mathOperStates.mathOperState;
         let paranthessCounter = 0;
         let letters = "x";
+
+
 
         for (let i = 0; i < mathOperation.length; i++)
         {
@@ -34,7 +37,7 @@ class ValidateExprationMath {
                     state = mathOperStates.Integer;
                 }
 
-                else if(operations.includes(mathOperation[i]))
+                else if(unaryOperators.includes(mathOperation[i]))
                 {
                     state = mathOperStates.Operations;
                 }
@@ -110,7 +113,7 @@ class ValidateExprationMath {
                     state = mathOperStates.LeftParenthesis;
                 }
 
-                else if (operations.includes(mathOperation[i]))
+                else if (unaryOperators.includes(mathOperation[i]))
                 {
                     state = mathOperStates.Operations;
                 }
@@ -183,5 +186,6 @@ class ValidateExprationMath {
         return true;
     };
 }
+
 
 export default ValidateExprationMath;
