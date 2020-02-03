@@ -9,139 +9,193 @@ class PlotLinerFunction extends Component {
 
     constructor(props) {
         super(props);
+
+        this.width = 600;
+        this.height = 600;
+        this.xCords = [];
     }
 
     drawOrdinate(ctx)
     {
-        ctx.moveTo(200,  0);
-        ctx.lineTo(200, 400);
+        ctx.moveTo(this.width/2,  0);
+        ctx.lineTo(this.width/2, this.height);
         ctx.stroke();
         ctx.save();
         ctx.font = "20px arial";
-        ctx.fillText('X', 380,200);
+        ctx.fillText('Y', this.width / 2, 20);
         ctx.save();
     }
 
     drawAbscissa(ctx)
     {
-        ctx.moveTo(0,  200);
-        ctx.lineTo(400, 200);
+        ctx.moveTo(0,  this.width/2);
+        ctx.lineTo(this.width, this.height/2);
         ctx.stroke();
         ctx.save();
         ctx.font = "20px arial";
-        ctx.fillText('Y', 200,20);
+        ctx.fillText('X', this.width - 20,this.height / 2);
         ctx.save();
+
     }
 
 
     drawZeroCordinate(ctx)
     {
-        ctx.font = "20px arial";
-        ctx.fillText('0', 203,218);
+        ctx.font = "10px arial";
+        ctx.fillText('0', this.width/2 + 5,this.height / 2 + 10);
         ctx.save();
     }
 
-    drawLinerFunction(a, b, ctx)
+    drawXCordinateNumbers(ctx)
     {
-       const x = -b/a;
-       const y = b;
+        let xCordsStep = parseInt(this.width / this.xCords.length);
+        let intention = this.width - xCordsStep * this.xCords.length;
+        let step = intention/2;
 
-       ctx.beginPath();
-       ctx.strokeStyle = '#ff0000';
-       ctx.fillStyle = "blue";
-       ctx.font = "20px arial";
+        let xCordinatePlace = [];
+
+        ctx.moveTo(step+xCordsStep,  this.height/2 - 5);
+        ctx.lineTo(step+xCordsStep, this.height/2 + 5);
+        ctx.font = "10px arial";
+        ctx.fillText(this.xCords[0],step+xCordsStep, this.height/2  - 10 );
+        step = step+xCordsStep;
+        xCordinatePlace.push(step);
+        for(let i = 1; i < this.xCords.length ; i++)
+        {
+            if (this.xCords[i] !== 0 ) {
+                ctx.moveTo(step + xCordsStep, this.height / 2 - 5);
+                ctx.lineTo(step + xCordsStep, this.height / 2 + 5);
+                ctx.fillText(this.xCords[i], step + xCordsStep, this.height / 2 - 10);
+                ctx.stroke();
+                step += xCordsStep;
+
+                xCordinatePlace.push(step);
+            }
+
+            if (this.xCords[i] === 0)
+            {
+                xCordinatePlace.push(this.width/2);
+            }
+
+        }
+        ctx.save();
 
 
+        return xCordinatePlace
+    }
 
-     if (parseInt(a) !== 0) {
-         if (x > 0 && y > 0) {
-             ctx.moveTo(400, 250);
-             ctx.lineTo(0, 50);
-             ctx.stroke();
-             ctx.save();
-             ctx.fillText(x.toFixed(2), 300, 198);
-             ctx.save();
-             ctx.fillText(y.toFixed(2), 205, 150);
-             ctx.save();
-         } else if (x > 0 && y < 0) {
-             ctx.moveTo(400, 50);
-             ctx.lineTo(120, 400);
-             ctx.stroke();
-             ctx.save();
-             ctx.fillText(x.toFixed(2), 280, 198);
-             ctx.save();
-             ctx.fillText(y.toFixed(2), 205, 300);
-             ctx.save();
-         } else if (x < 0 && y > 0) {
-             ctx.moveTo(300, 0);
-             ctx.lineTo(0, 350);
-             ctx.stroke();
-             ctx.save();
-             ctx.fillText(x.toFixed(2), 80, 198);
-             ctx.save();
-             ctx.fillText(y.toFixed(2), 205, 110);
-             ctx.save();
-         } else if (x < 0 && y < 0) {
-             ctx.moveTo(320, 400);
-             ctx.lineTo(0, 80);
-             ctx.stroke();
-             ctx.save();
-             ctx.fillText(x.toFixed(2), 120, 198);
-             ctx.save();
-             ctx.fillText(y.toFixed(2), 205, 280);
-             ctx.save();
-         }
+    drawFunction(ctx, result, xCordinatePlace)
+    {
+        let YCords = [];
+        for(let i = 0; i < this.xCords.length; i++)
+        {
+            let math = new MathExpration();
+            let number = result.replace(/x/g, '+' + this.xCords[i]);
+            number  = math.evaluateString(number);
 
-         if(a > 0 && y === 0)
-         {
-             ctx.moveTo(0, 400);
-             ctx.lineTo(400, 0);
-             ctx.stroke();
-             ctx.save();
-         }
+            if (isFinite(number))
+            {
+                YCords.push(300 - number);
+            }
+            else
+            {
+                console.log(number);
+                YCords.push('-');
+            }
+        }
 
-         if(a < 0 && y === 0)
-         {
-             ctx.moveTo(0,  0);
-             ctx.lineTo(400, 400);
-             ctx.stroke();
-             ctx.save();
-         }
 
-     }
-     else {
-         if (y > 0) {
-             ctx.moveTo(0, 100);
-             ctx.lineTo(400, 100);
-             ctx.stroke();
-             ctx.save();
-             ctx.fillText(y, 205, 90);
-             ctx.save();
-         }
-         else
-         {
-             ctx.moveTo(0, 300);
-             ctx.lineTo(400, 300);
-             ctx.stroke();
-             ctx.save();
-             ctx.fillText(y, 205, 290);
-             ctx.save();
-         }
-     }
+        ctx.moveTo(xCordinatePlace[0], YCords[0]);
+        for(let i = 1; i < this.xCords.length; i++)
+        {
+            if (YCords[i] === '-') {
+
+                ctx.moveTo(xCordinatePlace[i + 1], YCords[i + 1]);
+            }
+            ctx.lineTo(xCordinatePlace[i], YCords[i]);
+        }
+        ctx.stroke();
+        ctx.save();
+
+    }
+
+    FillXCordinates(ctx, range)
+    {
+        if (range <= 10)
+        {
+            let num = -10;
+            for (let i = 0; i < 21; i++)
+            {
+
+                this.xCords.push(num);
+                ++num;
+            }
+        }
+        else if (range <= 20)
+        {
+            let num = -range;
+
+
+            for (let i = 0; i < 2*range + 1; i++)
+            {
+                this.xCords.push(Math.round(num));
+                ++num;
+            }
+        }
+
+        else
+        {
+            let num = -range;
+            let sum  = range / 10;
+            console.log(sum);
+            for (let i = 0; i < 21 ; i++)
+            {
+                this.xCords.push(Math.round(num));
+                num = num + sum;
+            }
+        }
+    }
+
+
+    DrawYCordinateNumbers(ctx)
+    {
+        let Ycordinate =  this.height ;
+        let BeginCord = - this.height / 2;
+        let step = 20;
+        ctx.font = "10px arial";
+        for (let i = 0; i < 57; i++) {
+               if (BeginCord !== -20) {
+                   ctx.moveTo(300 + 5, Ycordinate - step);
+                   ctx.lineTo(300 - 5, Ycordinate - step);
+                   ctx.fillText(BeginCord + step, 300 - 25, Ycordinate - step);
+                   ctx.stroke();
+                   Ycordinate -= step;
+                   BeginCord += step;
+               }else
+               {
+                   Ycordinate -= step;
+                   BeginCord += step;
+               }
+        }
 
     }
 
     updateCanvas() {
-        let mathString = new MathExpration();
-        const xNumber =  this.props.number;
-        const YOperRes =  mathString.evaluateString(this.props.operationResult);
+        let result = this.props.operationResult;
+        let range = this.props.range;
 
         const ctx = this.refs.canvas.getContext('2d');
         ctx.beginPath();
         this.drawOrdinate(ctx);
         this.drawAbscissa(ctx);
         this.drawZeroCordinate(ctx);
-        this.drawLinerFunction(xNumber, YOperRes, ctx);
+        this.FillXCordinates(ctx, range);
+        this.DrawYCordinateNumbers(ctx);
+
+        let xCordinatePlace =  this.drawXCordinateNumbers(ctx);
+
+        this.drawFunction(ctx, result, xCordinatePlace);
+
     }
 
     componentDidMount() {
@@ -151,19 +205,14 @@ class PlotLinerFunction extends Component {
 
     render() {
 
-        let mathString = new MathExpration();
+       let stringResult = this.props.operationResult;
 
-        let stringResult = mathString.evaluateString(this.props.operationResult);
 
-        if(isNaN(stringResult))
-        {
-            stringResult = "Unsupported operation"
-        }
-
-        return (
+       return (
             <div>
-                <h1>{this.props.number}x + {stringResult}</h1>
-                <canvas ref="canvas" width={400} height={400} className="canvas"/>
+                <h6 className="text-justify inputResult">f(x) =  {stringResult}  </h6>
+                <h6 className="text-left">x∈ from - {this.props.range} to {this.props.range}</h6>
+                <canvas ref="canvas" width={this.width} height={this.height} className="canvas"/>
             </div>
         );
     }

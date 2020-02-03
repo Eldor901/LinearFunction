@@ -2,16 +2,21 @@
 class ValidateExprationMath {
     isMathOperation = (mathOperation) =>
     {
+
+        mathOperation.toLowerCase();
+
         const  mathOperStates = {
-            mathOperState: 'mathOperState',Integer: 'Integer', Operations: 'operations',
+            mathOperState: 'mathOperState',Integer: 'Integer', Operations: 'operations', Variable: 'variable',
             LeftParenthesis:'LeftParenthesis', RightParenthesis: 'RightParenthesis', Error: 'Error'};
         let operations = "+-/*";
         let numbers = "1234567890";
         let state = mathOperStates.mathOperState;
         let paranthessCounter = 0;
+        let letters = "x";
 
         for (let i = 0; i < mathOperation.length; i++)
         {
+
             if(mathOperation[i] === '(')
             {
                 paranthessCounter++;
@@ -37,6 +42,11 @@ class ValidateExprationMath {
                 else if (mathOperation[i] === '(')
                 {
                     state = mathOperStates.LeftParenthesis;
+                }
+
+                else if (mathOperation[i].includes(mathOperation[i]))
+                {
+                    state = mathOperStates.Variable;
                 }
 
                 else
@@ -78,6 +88,11 @@ class ValidateExprationMath {
                     state = mathOperStates.Integer;
                 }
 
+                else if (letters.includes(mathOperation[i]))
+                {
+                    state = mathOperStates.Variable;
+                }
+
                 else
                 {
                     state = mathOperStates.Error;
@@ -99,6 +114,12 @@ class ValidateExprationMath {
                 {
                     state = mathOperStates.Operations;
                 }
+
+                else if (letters.includes(mathOperation[i]))
+                {
+                    state = mathOperStates.Variable;
+                }
+
                 else
                 {
                     state = mathOperStates.Error;
@@ -121,11 +142,37 @@ class ValidateExprationMath {
                 }
             }
 
-            else  if(state === mathOperStates.Error)
+            else  if (state === mathOperStates.Variable)
             {
-                return false;
+
+                if (operations.includes(mathOperation[i]))
+                {
+                    state = mathOperStates.Operations;
+                }
+
+                else if (mathOperation[i] === ')')
+                {
+                    state = mathOperStates.RightParenthesis;
+                }
+
+                else
+                {
+                    state = mathOperStates.Error;
+                }
             }
 
+
+            else
+            {
+                state =  mathOperStates.Error;
+            }
+
+        }
+
+
+        if(state === mathOperStates.Error)
+        {
+            return false;
         }
 
         if(paranthessCounter !== 0)
@@ -136,6 +183,5 @@ class ValidateExprationMath {
         return true;
     };
 }
-
 
 export default ValidateExprationMath;

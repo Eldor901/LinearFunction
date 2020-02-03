@@ -4,12 +4,13 @@ class MathExpration {
     _process_operation(stack, operation)
     {
 
-        if (operation === '~')
+        if (operation === '~' || operation === '#')
         {
             let l = stack[stack.length - 1]; stack.pop();
 
             switch (operation) {
-                case '~': stack.push(parseFloat(-l)); break;
+                case '~': stack.push(-l); break;
+                case '#': stack.push(l); break;
             }
         }
         else {
@@ -27,7 +28,7 @@ class MathExpration {
 
     _priority(operation)
     {
-        if (operation === '~')
+        if (operation === '~' || operation === '#')
             return 3;
         if (operation === '+' || operation === '-')
             return 1;
@@ -42,6 +43,7 @@ class MathExpration {
         let is_op = "+-/*";
         let numbers = "1234567890";
         let may_be_unary = true;
+
 
         for (let i = 0; i < s.length; i++) {
             if (s[i] === " ") {
@@ -66,9 +68,13 @@ class MathExpration {
             else if (is_op.includes(s[i])) {
                 let  cur_op = s[i];
 
-                if (may_be_unary && cur_op === '-')
+                if (may_be_unary && (cur_op === '-' || cur_op === '+'))
                 {
-                    cur_op = "~"; //unary minus
+                    if (cur_op === '-')
+                        cur_op = "~"; //unary minus
+                    else if (cur_op === '+')
+                        cur_op = '#'  //unary plus
+
                 }
 
                 while (operation.length !== 0 && (
@@ -88,6 +94,7 @@ class MathExpration {
                     number = number*10 + parseFloat(s[i++]);
                 }
                 --i;
+
                 stack.push(number);
                 may_be_unary = false;
             }
@@ -99,9 +106,11 @@ class MathExpration {
             operation.pop();
         }
 
-        return parseFloat(stack[stack.length -1]);
+        return (stack[stack.length -1]);
     }
 
 }
+
+let math = new MathExpration();
 
 export default MathExpration;

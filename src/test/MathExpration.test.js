@@ -32,3 +32,9 @@ test('EquationWithUnaryMinusAfterParentheses', ()=>{
 test('EquationWithNestedParentheses', ()=>{
     assert.deepEqual( -2 ,mathExpiration.evaluateString("48/(3*(2+2*(-2-3)))"));
 });
+
+test('unaryPlus', ()=>{
+    assert.deepEqual( 4 ,mathExpiration.evaluateString("2*(+3*(+2-3)+3-2)*(+2-3)"));
+});
+
+

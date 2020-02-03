@@ -12,7 +12,7 @@ export default class Calc extends React.Component {
     {
         super(props);
         this.state = {
-            number: null,
+            range: 10,
             mathOperations: null,
             isSubmited: false,
             selected: "Own",
@@ -30,12 +30,15 @@ export default class Calc extends React.Component {
 
         let mathOperation = this.state.mathOperations;
 
-        if (mathOperation !== '')
-            mathOperation = mathOperation.replace(/\s*/g,'');
+        if (mathOperation !== null)
+            if (mathOperation !== '')
+                mathOperation = mathOperation.replace(/\s*/g,'');
+            else
+                mathOperation = " ";
+         else
+            mathOperation = " ";
 
         let validate = new ValidateExprationMath();
-
-
         let isMathoperation =  validate.isMathOperation(mathOperation);
 
 
@@ -51,12 +54,13 @@ export default class Calc extends React.Component {
 
 
     handleChangeNumber(event) {
-        this.setState({number: event.target.value});
+        this.setState({range: event.target.value});
         this.setState({isSubmitted: false});
     }
 
 
     handleChangeMathOperation(event) {
+
         this.setState({mathOperations: event.target.value});
         this.setState({isSubmitted: false});
     }
@@ -69,48 +73,74 @@ export default class Calc extends React.Component {
     }
 
     render() {
-        const number = this.state.number;
         const mathOpiration = this.state.mathOperations;
+
 
         let PlotFunction;
 
         if(this.state.selected === "Own")
         {
             if (this.state.isSubmitted) {
-                if(mathOpiration === '')
-                    PlotFunction = <h1>Didnt Filled All Forms</h1>;
+                if(mathOpiration === '' || mathOpiration === null)
+                    PlotFunction = <h3>You did not filed the form please check your input </h3>;
                 else {
-                    PlotFunction = <PlotLinerFunction number={number} operationResult={mathOpiration}/>
+                    PlotFunction = <PlotLinerFunction operationResult={mathOpiration} range={this.state.range}/>
                 }
             }
         }
         else
         {
             if (this.state.isSubmitted) {
-                PlotFunction = <WolframLinerFunction number = {number} operationResult={mathOpiration} />
+                PlotFunction = <WolframLinerFunction operationResult={mathOpiration} />
             }
         }
 
 
-        return (
-            <div>
-                <div className='formRadio'>
+        let range =  parseInt(this.state.range);
 
-                   <label> <input name="dzen" type="radio" value='Wolfram'
-                              checked={this.state.selected === 'Wolfram'} onChange={this.onCheckChange}/> Wolfram</label>
-                   <label> <input name="dzen" type="radio" value='Own'
-                              checked={this.state.selected ===  'Own'} onChange={this.onCheckChange}/> Own</label>
+
+        return (
+            <div className='container'>
+
+
+                <div className='formRadio'>
+                    <div className="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="Wolfram" name="customRadioInline1"
+                               className="custom-control-input" value='Wolfram'
+                               checked={this.state.selected === 'Wolfram'} onChange={this.onCheckChange}/>
+                        <label className="custom-control-label" htmlFor="Wolfram">Wolfram</label>
+                    </div>
+
+
+                    <div className="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="Own" name="customRadioInline1"
+                               className="custom-control-input" value='Own'
+                               checked={this.state.selected ===  'Own'} onChange={this.onCheckChange}/>
+                        <label className="custom-control-label" htmlFor="Own">Own</label>
+                    </div>
                 </div>
 
-                <div className="centerForm">
-                    <form onSubmit={this.handleSubmit} className="linerFunctionForm">
-                        <p className='formLeft mathOperTop'><input className='formNum'  type='number' step="0.01" value={this.state.number} onChange={this.handleChangeNumber}
-                                  placeholder='number'
+                <form   onSubmit={this.handleSubmit} className=" ">
+                    <div className=" input-group  input-group-lg">
+                        <span className="input-group-addon functionfx" id="sizing-addon1">f(x)</span>
+                        <input className='formOper form-control' type='text' value={this.state.mathOperations} onChange={this.handleChangeMathOperation} placeholder='x*x +2*x +4'/>
+                        <button>Calc</button> <br/>
+                    </div>
+
+                    <div className="input-group-lg text-right fromRange">
+                        <span>x∈ from </span>
+                        <span> - </span>
+                        <input className='formNum'  type='number'  value={range} onChange={this.handleChangeNumber}
+                               placeholder="10"
                         />
-                            x</p>
-                        <input className='formLeft  formOper' type='text' value={this.state.mathOperations} onChange={this.handleChangeMathOperation} placeholder='math operations'/>
-                        <button>Calc</button>
-                    </form>
+                        <span className="spanTo">to</span>
+                        <input className='formNum'  type='number'  value={range} onChange={this.handleChangeNumber}
+                               placeholder='10'
+                        />
+                    </div>
+                </form>
+
+                <div className="centerForm">
                     {PlotFunction}
                 </div>
             </div>

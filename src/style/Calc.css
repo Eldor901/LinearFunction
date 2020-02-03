@@ -18,10 +18,17 @@
 .formOper
 {
     padding-left: 10px;
+
+}
+
+.formOper:focus
+{
+    outline: none;
+    box-shadow: none!important;
 }
 
 
-.linerFunctionForm
+.FunctionForm
 {
     display: inline-block;
 }
@@ -36,4 +43,34 @@
     text-align: center;
     margin-bottom: 40px;
     margin-top: 30px;
+}
+
+.WolframInput
+{
+    padding-right: 20px;
+}
+
+.functionfx
+{
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    background-color: grey;
+}
+
+.clear
+{
+    clear: both;
+}
+
+.spanTo
+{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.fromRange
+{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

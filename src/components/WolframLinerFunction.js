@@ -8,10 +8,7 @@ class WolframLinerFunction extends Component {
 
     async componentDidMount() {
 
-        const xNumber =  this.props.number + "x" + "+";
-        const OperRes =  this.props.operationResult;
-
-        const linerFunction = xNumber + OperRes;
+        const linerFunction = this.props.operationResult;
         const id = process.env.Wolfram_app_id;
 
         const url = `http://api.wolframalpha.com/v2/query?input=${linerFunction}&appid=${id}&output=json`;
