@@ -41,8 +41,9 @@ class MathExpration {
         let stack = [];
         let operation = [];
         let is_op = "+-/*";
-        let numbers = "1234567890";
+        let numbers = "1234567890.";
         let may_be_unary = true;
+        let fixedNumber = false;
 
 
         for (let i = 0; i < s.length; i++) {
@@ -90,10 +91,30 @@ class MathExpration {
                 may_be_unary = true;
             } else {
                 let number = 0;
+                let fl = 0;
                 while (i < s.length && numbers.includes(s[i])) {
-                    number = number*10 + parseFloat(s[i++]);
+
+                    if(s[i] === '.')
+                    {
+                        fixedNumber = true;
+                        i++;
+                        fl = 1;
+                    }
+
+                    if (fixedNumber) {
+                        let float = parseFloat(s[i++]) / Math.pow(10, fl);
+                        number = number +  float;
+                        fl++;
+                    }
+                    else
+                        number = number*10 + parseFloat(s[i++]);
                 }
                 --i;
+
+
+
+                fixedNumber = false;
+
 
                 stack.push(number);
                 may_be_unary = false;
@@ -111,6 +132,5 @@ class MathExpration {
 
 }
 
-let math = new MathExpration();
 
 export default MathExpration;

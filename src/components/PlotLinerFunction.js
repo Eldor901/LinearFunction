@@ -63,10 +63,13 @@ class PlotLinerFunction extends Component {
         for(let i = 1; i < this.xCords.length ; i++)
         {
             if (this.xCords[i] !== 0 ) {
-                ctx.moveTo(step + xCordsStep, this.height / 2 - 5);
-                ctx.lineTo(step + xCordsStep, this.height / 2 + 5);
-                ctx.fillText(this.xCords[i], step + xCordsStep, this.height / 2 - 10);
-                ctx.stroke();
+
+                if (Number.isInteger(this.xCords[i])){
+                    ctx.moveTo(step + xCordsStep, this.height / 2 - 5);
+                    ctx.lineTo(step + xCordsStep, this.height / 2 + 5);
+                    ctx.fillText(this.xCords[i], step + xCordsStep, this.height / 2 - 10);
+                    ctx.stroke();
+                }
                 step += xCordsStep;
 
                 xCordinatePlace.push(step);
@@ -84,9 +87,90 @@ class PlotLinerFunction extends Component {
         return xCordinatePlace
     }
 
+    FillXCordinates(ctx, range)
+    {
+        if (range <= 10)
+        {
+            let num = -10;
+            for (let i = 0; i < 21; i += 0.1)
+            {
+
+                if (num <= 10) {
+
+                    let IntNum = Math.trunc(num);
+                    let DoubleNum;
+
+                    DoubleNum = (IntNum - num).toFixed(1);
+
+
+                    if (DoubleNum == 0 || DoubleNum == -1)
+                    {
+                        if (DoubleNum == -1)
+                            this.xCords.push(IntNum + 1);
+                        else
+                            this.xCords.push(IntNum);
+                    }
+                    else
+                    {
+                        this.xCords.push(num.toFixed(1));
+                    }
+
+                  num += 0.1;
+                }
+            }
+        }
+        else if (range <= 20)
+        {
+            let num = -range;
+
+            for (let i = 0; i < 2*range + 1; i++)
+            {
+                this.xCords.push(Math.round(num));
+                ++num;
+            }
+        }
+
+        else
+        {
+            let num = -range;
+            let sum  = range / 10;
+            for (let i = 0; i < 21 ; i++)
+            {
+                this.xCords.push(Math.round(num));
+                num = num + sum;
+            }
+        }
+    }
+
+
+    DrawYCordinateNumbers(ctx)
+    {
+        let Ycordinate =  this.height ;
+        let BeginCord = - this.height / 2;
+        let step = 20;
+        ctx.font = "10px arial";
+        for (let i = 0; i < 57; i++) {
+            if (BeginCord !== -20) {
+                ctx.moveTo(300 + 5, Ycordinate - step);
+                ctx.lineTo(300 - 5, Ycordinate - step);
+                ctx.fillText(BeginCord + step, 300 - 25, Ycordinate - step);
+                ctx.stroke();
+                Ycordinate -= step;
+                BeginCord += step;
+            }else
+            {
+                Ycordinate -= step;
+                BeginCord += step;
+            }
+        }
+
+    }
+
     drawFunction(ctx, result, xCordinatePlace)
     {
         let YCords = [];
+
+
         for(let i = 0; i < this.xCords.length; i++)
         {
             let math = new MathExpration();
@@ -104,7 +188,6 @@ class PlotLinerFunction extends Component {
             }
         }
 
-
         ctx.moveTo(xCordinatePlace[0], YCords[0]);
         for(let i = 1; i < this.xCords.length; i++)
         {
@@ -119,66 +202,6 @@ class PlotLinerFunction extends Component {
 
     }
 
-    FillXCordinates(ctx, range)
-    {
-        if (range <= 10)
-        {
-            let num = -10;
-            for (let i = 0; i < 21; i++)
-            {
-
-                this.xCords.push(num);
-                ++num;
-            }
-        }
-        else if (range <= 20)
-        {
-            let num = -range;
-
-
-            for (let i = 0; i < 2*range + 1; i++)
-            {
-                this.xCords.push(Math.round(num));
-                ++num;
-            }
-        }
-
-        else
-        {
-            let num = -range;
-            let sum  = range / 10;
-            console.log(sum);
-            for (let i = 0; i < 21 ; i++)
-            {
-                this.xCords.push(Math.round(num));
-                num = num + sum;
-            }
-        }
-    }
-
-
-    DrawYCordinateNumbers(ctx)
-    {
-        let Ycordinate =  this.height ;
-        let BeginCord = - this.height / 2;
-        let step = 20;
-        ctx.font = "10px arial";
-        for (let i = 0; i < 57; i++) {
-               if (BeginCord !== -20) {
-                   ctx.moveTo(300 + 5, Ycordinate - step);
-                   ctx.lineTo(300 - 5, Ycordinate - step);
-                   ctx.fillText(BeginCord + step, 300 - 25, Ycordinate - step);
-                   ctx.stroke();
-                   Ycordinate -= step;
-                   BeginCord += step;
-               }else
-               {
-                   Ycordinate -= step;
-                   BeginCord += step;
-               }
-        }
-
-    }
 
     updateCanvas() {
         let result = this.props.operationResult;
@@ -192,9 +215,13 @@ class PlotLinerFunction extends Component {
         this.FillXCordinates(ctx, range);
         this.DrawYCordinateNumbers(ctx);
 
+        console.log(this.xCords);
+
         let xCordinatePlace =  this.drawXCordinateNumbers(ctx);
 
-        this.drawFunction(ctx, result, xCordinatePlace);
+        console.log(xCordinatePlace);
+
+       this.drawFunction(ctx, result, xCordinatePlace);
 
     }
 
@@ -205,10 +232,10 @@ class PlotLinerFunction extends Component {
 
     render() {
 
-       let stringResult = this.props.operationResult;
+        let stringResult = this.props.operationResult;
 
 
-       return (
+        return (
             <div>
                 <h6 className="text-justify inputResult">f(x) =  {stringResult}  </h6>
                 <h6 className="text-left">x∈ from - {this.props.range} to {this.props.range}</h6>
